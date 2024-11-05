@@ -15,9 +15,17 @@ The project has the following structure:
 /codego
 │
 ├── parser/
-│   ├── __init__.py
+│   ├── __init__.py                     # Parser class for building the syntax tree
 │   ├── lexer.py                        # Lexer class for tokenizing input
-│   └── parser.py                       # Parser class for building the syntax tree
+│   ├── bawat.py                        # Parser for Bawat
+│   ├── expression.py                   # Parser for expression
+│   ├── gawa.py                         # Parser for Gawa
+│   ├── habang.py                       # Parser for Habang
+│   ├── kapag.py                        # Parser for Kapag
+│   ├── komento.py                      # Parser for Comments
+│   ├── kung.py                         # Parser for Kung
+│   ├── lista.py                        # Parser for Lists
+│   └── variable.py                     # Parser for Variable Declarations
 ├── tests/
 │   ├── error/                          
 │   │   └── error1.cg                   # Example CodeGo invalid source files
