@@ -1,3 +1,13 @@
+# Table of Contents
+
+- [CodeGo](#codego)
+  - [Introduction](#introduction)
+  - [Basic Data Types](#basic-data-types)
+  - [Control Structures](#control-structures)
+  - [Functions and Classes](#functions-and-classes)
+  - [Error Handling](#error-handling)
+  - [Comments](#comments)
+
 # CodeGo
 
 ## Introduction
