@@ -43,3 +43,37 @@ def gawa_declaration(parser):
         'parameters': parameters,
         'body': body
     }
+
+
+def gawa_invocation(parser):
+    """
+    Parses a function invocation statement from the token stream.
+
+    A gawa invocation consists of an identifier (the function name), 
+    followed by a list of arguments enclosed in parentheses. This function 
+    handles the parsing of these elements and returns a structured representation.
+
+    Returns:
+        dict: A parsed representation of the function invocation, including:
+              - 'type': The type of invocation ('function_invocation').
+              - 'function_name': The name of the function being invoked.
+              - 'arguments': A list of arguments passed to the function.
+    """
+
+    # Expect and consume the identifier token for the function name
+    identifier = parser.eat('IDENTIFIER')  
+
+    # Expect and consume the left parenthesis token
+    parser.eat('LPAREN')  
+
+    # Parse the function's arguments
+    arguments = parser.arguments()  
+
+    # Expect and consume the right parenthesis token
+    parser.eat('RPAREN')  
+
+    return {
+        'type': 'function_invocation',
+        'function_name': identifier[1],
+        'arguments': arguments
+    }

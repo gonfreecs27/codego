@@ -3,11 +3,29 @@ import re
 class CodeGoLexer:
     def __init__(self, source):
         self.source = source
+        
+        # List to store the generated tokens
         self.tokens = []
+        
+        # Line number tracker for error reporting
         self.line_number = 1
+        
+        # Start the tokenization process
         self.tokenize()
 
+
     def tokenize(self):
+        """
+        Tokenizes the source code into a list of tokens based on predefined specifications.
+
+        This method uses regular expressions to identify various elements in the source code, 
+        including basic types, literals, keywords, and operators. It also handles comments and 
+        whitespace.
+
+        Raises:
+            RuntimeError: If an unexpected character is encountered in the source code.
+        """
+
         token_specification = [
             ('BASIC_TYPE', r'Numero|Desimal|Teksto|Tsek|Lista|Bagay'),  # Basic types
             ('NUMERO',    r'\d+(\.\d+)?'),  # Numeric literals
@@ -46,13 +64,13 @@ class CodeGoLexer:
             ('RBRACKET',  r'\]'),            # Right square bracket (for lists)
             ('COMMA',     r','),             # Comma
             ('SEMICOLON', r';'),             # Semicolon
-            ('COLON',     r':'),              # Colon
-            ('EQUALS',    r'='),              # Equals
-            ('GREATER',   r'>'),              # Greater than
-            ('LESS',      r'<'),              # Less than
-            ('GREATER_EQUAL', r'>='),         # Greater than or equal to
-            ('LESS_EQUAL', r'<='),            # Less than or equal to
-            ('ERROR',     r'.'),              # Any other character
+            ('COLON',     r':'),             # Colon
+            ('EQUALS',    r'='),             # Equals
+            ('GREATER',   r'>'),             # Greater than
+            ('LESS',      r'<'),             # Less than
+            ('GREATER_EQUAL', r'>='),        # Greater than or equal to
+            ('LESS_EQUAL', r'<='),           # Less than or equal to
+            ('ERROR',     r'.'),             # Any other character
         ]
 
         tok_regex = '|'.join(f'(?P<{pair[0]}>{pair[1]})' for pair in token_specification)

@@ -1,9 +1,11 @@
 from .bawat import bawat_statement
-from .gawa import gawa_declaration
+from .expression import expression_statement
+from .gawa import gawa_declaration, gawa_invocation
 from .habang import habang_statement
 from .kapag import kapag_statement
+from .komento import komento_statement
 from .kung import kung_statement
-from .lista import parse_list
+from .variable import var_declaration
 
 class CodeGoParser:
     def __init__(self, tokens):
@@ -11,33 +13,80 @@ class CodeGoParser:
         self.pos = 0
 
     def parse(self):
+        """
+        Parses the input tokens into statements.
+
+        This method serves as the entry point for parsing the entire code structure.
+        It gathers all statements from the input token stream and returns them.
+
+        Returns:
+            list: A list of parsed statements.
+
+        Raises:
+            RuntimeError: If no statements are found in the input.
+        """
+        
+        # Gather all statements from the token stream
         stmts = self.statements()
         if len(stmts) == 0:
             raise RuntimeError('File is empty. There is nothing to parse.')
+        
         return stmts
 
+
     def statements(self):
+        """
+        Parses a sequence of statements from the current token stream.
+
+        This method continues to parse statements until an end condition is met,
+        which can be either the end of the file (EOF), a closing brace (RBRACE),
+        or the HINTO token (break statement).
+
+        Returns:
+            list: A list of parsed statements.
+        """
+        
+        # Initialize an empty list to hold parsed statements
         statements = []
         while self.current_token()[0] not in ['EOF', 'RBRACE', 'HINTO']:
             stmt = self.statement()
+            
+            # If a statement was successfully parsed, 
+            # add it to the list of statements
             if stmt is not None:
                 statements.append(stmt)
         return statements
 
+
     def statement(self):
+        """
+        Parses a single statement from the current token stream based on the current token type.
+
+        This method identifies the type of statement to parse and delegates to the appropriate 
+        parsing function based on the token type. It handles variable declarations, comments, 
+        control flow statements, function invocations, and other statement types.
+
+        Returns:
+            dict: A parsed representation of the statement, or None for newlines.
+        
+        Raises:
+            RuntimeError: If an unexpected token is encountered.
+        """
+        
+        # Get the current token from the token stream
         current_token = self.current_token()
         token_type = current_token[0]
         line_number = current_token[2]
         
         # For variable declaration
         if token_type == 'BASIC_TYPE':
-            return self.var_declaration()
+            return var_declaration(self)
         
-        # For Comments
+        # For comments
         elif token_type == 'COMMENT':
-            return self.comment()
+            return komento_statement(self)
         
-        # For New Lines
+        # For new lines
         elif token_type == 'NEWLINE':
             self.eat('NEWLINE')
             return None
@@ -47,9 +96,9 @@ class CodeGoParser:
             # Look ahead for function invocation
             next_token = self.peek()  # Check the next token
             if next_token[0] == 'LPAREN':
-                return self.function_invocation()
+                return gawa_invocation(self)
             else:
-                return self.expression_statement()
+                return expression_statement(self)
         
         # Kung statement
         elif token_type == 'KUNG':
@@ -74,35 +123,19 @@ class CodeGoParser:
         else:
             raise RuntimeError(f'Unexpected token: {self.current_token()} on line {line_number}')
 
-    def var_declaration(self):
-        basic_type = self.eat('BASIC_TYPE')
-        identifier = self.eat('IDENTIFIER')
-        expression = None
-        if self.current_token()[0] == 'EQUALS':
-            self.eat('EQUALS')
-            if basic_type[1] == 'Lista' and self.current_token()[0] == 'LBRACKET':
-                expression = parse_list(self)
-            else:
-                expression = self.expression()
-        return {
-            'type': 'var_declaration',
-            'basic_type': basic_type[1],
-            'identifier': identifier[1],
-            'expression': expression
-        }
-        
-    def function_invocation(self):
-        identifier = self.eat('IDENTIFIER')
-        self.eat('LPAREN')
-        arguments = self.arguments()
-        self.eat('RPAREN')
-        return {
-            'type': 'function_invocation',
-            'function_name': identifier[1],
-            'arguments': arguments
-        }
 
     def arguments(self):
+        """
+        Parses the arguments within a function call.
+
+        Returns:
+            list: A list of parsed arguments, which can include:
+                - Identifiers, potentially with property access (e.g., object.property).
+                - Numeric literals.
+                - String literals.
+                - Boolean literals.
+        """
+    
         args = []
         while self.current_token()[0] != 'RPAREN':
             if self.current_token()[0] == 'IDENTIFIER':
@@ -127,43 +160,42 @@ class CodeGoParser:
                 self.eat('COMMA')
         return args
 
+
     def expression(self):
+        """
+        Parses an expression which can include binary operations (addition, subtraction, 
+        comparisons, etc.) and terms.
+
+        Returns:
+            dict: A structured representation of the parsed expression, including:
+                - 'type': The type of operation ('binary_op' for binary operations).
+                - 'operator': The operator used in the operation (e.g., '+', '-', '>', etc.).
+                - 'left': The left operand of the operation.
+                - 'right': The right operand of the operation.
+        """
+    
         term = self.term()
         while self.current_token()[0] in ('PLUS', 'MINUS', 'GREATER', 'LESS', 'GREATER_EQUAL', 'LESS_EQUAL'):
             operator = self.eat(self.current_token()[0])
             term2 = self.term()
             term = {'type': 'binary_op', 'operator': operator[1], 'left': term, 'right': term2}
         return term
-    
-    def expression_statement(self):
-        # Handle assignments or simple expressions
-        if self.current_token()[0] == 'IDENTIFIER':
-            identifier = self.eat('IDENTIFIER')
-        
-            # Check if the next token is an assignment
-            if self.current_token()[0] == 'EQUALS':
-                self.eat('EQUALS')
-                expr = self.expression()
-                return {
-                    'type': 'assignment',
-                    'identifier': identifier[1],
-                    'expression': expr
-                }
-            else:
-                # If no assignment, it can be a simple expression
-                return {
-                    'type': 'expression',
-                    'expression': identifier[1]
-                }
-        else:
-            # Handle other cases as expressions directly
-            expr = self.expression()
-            return {
-                'type': 'expression',
-                'expression': expr
-            }
+
 
     def term(self):
+        """
+        Parses a term in an expression.
+
+        Returns:
+            dict or any: A parsed term, which can include:
+                        - An identifier, potentially with property access.
+                        - A numeric literal.
+                        - A boolean literal.
+                        - A string literal.
+                        - An expression enclosed in parentheses.
+                        - A block of statements enclosed in braces.
+        """
+
         current_token = self.current_token()[0]
         if current_token == 'IDENTIFIER':
             identifier = self.eat('IDENTIFIER')
@@ -230,25 +262,59 @@ class CodeGoParser:
 
         return parameters
 
-    def comment(self):
-        comment = self.eat('COMMENT')
-        return {'type': 'comment', 'text': comment[1]}
 
     def eat(self, token_type):
+        """
+        Consumes the current token if it matches the expected type.
+
+        Args:
+            token_type (str): The type of the token expected (e.g., 'IDENTIFIER', 'NUMERO').
+
+        Returns:
+            tuple: The consumed token, which includes its type, value, and line number.
+
+        Raises:
+            RuntimeError: If the current token does not match the expected type, indicating an error.
+        """
         current = self.current_token()
+        
+        # Check if the token type matches the expected type
         if current[0] == token_type:
             token = current
             self.pos += 1
             return token
         else:
+            # Raise an error if the current token does not match the expected type
             raise RuntimeError(f'Expected {token_type}, got {current} on line {current[2]}')
 
+
     def current_token(self):
+        """
+        Retrieves the current token based on the current position.
+
+        Returns:
+            tuple: The current token, which is a tuple containing the token type,
+                its value, and the line number.
+        
+        If the current position is beyond the end of the tokens list,
+        returns an 'EOF' token, indicating the end of the input.
+
+        If there are no tokens, returns an 'EOF' token with line number 1.
+        """
         if self.pos < len(self.tokens):
             return self.tokens[self.pos]
         return ('EOF', None, self.tokens[-1][2] if self.tokens else 1)
-    
+
+
     def peek(self):
+        """
+        Looks ahead to the next token in the token stream without advancing the current position.
+
+        Returns:
+            tuple: The next token if available, otherwise an 'EOF' token.
+
+        The 'EOF' token indicates that there are no more tokens to process.
+        """
         if self.pos + 1 < len(self.tokens):
             return self.tokens[self.pos + 1]
         return ('EOF', None, self.tokens[-1][2] if self.tokens else 1)
