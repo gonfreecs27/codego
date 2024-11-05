@@ -1,0 +1,11 @@
+Lista menu = [{
+    ulam: "Pritong Itlog",
+    presyo: 50.00
+}, {
+    ulam: "Adobo",
+    presyo: 100.50
+}]
+
+Bawat (luto Sa menu) {
+    print("Ang ulam na ", luto.ulam, " ay may presyong ", luto.presyo)
+}

@@ -1,0 +1,5 @@
+Desimal sukli = bayad - total
+# print is a built-in function to print all given arguments.
+print(sukli)
+
+Test hello = "OK"

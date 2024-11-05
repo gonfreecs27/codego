@@ -1,0 +1,9 @@
+Kapag (mahalKa) {
+    Kaso "Oo":
+        print("Edi Wow!")
+        Hinto
+    Kaso "Hindi":
+        print("Hanap iba.")
+        Desimal edad = 10
+        Hinto
+}
