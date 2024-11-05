@@ -121,7 +121,8 @@ To define functions and methods:
 # if explicitly defined, and argument’s type mismatched with the defined
 # type, an exception will be thrown 
 Gawa bayaran (Desimal bayad, Desimal presyo) {
-    return bayad - presyo
+    sukli = bayad - presyo
+    print(sukli)
 }
 ```
 

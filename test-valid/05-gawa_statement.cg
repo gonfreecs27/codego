@@ -1,0 +1,6 @@
+Gawa bayaran (Desimal bayad, Desimal presyo) {
+    Desimal sukli = bayad - presyo
+    print(sukli)
+}
+
+bayaran(50, 25)

@@ -36,11 +36,17 @@ try:
     parser = CodeGoParser(tokens)
     ast = parser.parse()
     print(ast)
-            
-    print("Valid Syntax!")
+    
+    print()
+    print("-----------------------------")
+    print("Result: Valid Syntax!")
+    print()
+    print()
 except FileNotFoundError:
     print(f"Error: The file '{filename}' was not found.")
 except Exception as e:
     print(f"Invalid Syntax: {e}")
+    
+    # Enable this line for debugging purposes
     # traceback.print_exc()
     

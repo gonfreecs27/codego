@@ -1,4 +1,5 @@
 from .bawat import bawat_statement
+from .gawa import gawa_declaration
 from .habang import habang_statement
 from .kapag import kapag_statement
 from .kung import kung_statement
@@ -62,8 +63,13 @@ class CodeGoParser:
         elif token_type == 'HABANG':
             return habang_statement(self)
 
+        # Bawat statement
         elif token_type == 'BAWAT':
             return bawat_statement(self)
+
+        # Gawa declaration
+        elif token_type == 'GAWA':
+            return gawa_declaration(self)
 
         else:
             raise RuntimeError(f'Unexpected token: {self.current_token()} on line {line_number}')
@@ -187,6 +193,42 @@ class CodeGoParser:
             self.eat('RBRACE')
             return expr
         raise RuntimeError(f'Unexpected token in term: {self.current_token()}')
+
+
+    def parameters(self):
+        """
+        Parses parameters in a function declaration, where each parameter can optionally 
+        have a type (e.g., 'Desimal bayad' or just 'bayad').
+
+        Returns:
+            list: A list of dictionaries, each representing a parameter with the following keys:
+                - 'type': The type of the parameter as a string, or None if untyped.
+                - 'name': The name of the parameter as a string.
+        """
+
+        parameters = []
+
+        while self.current_token()[0] != 'RPAREN':
+            # Check if there is an optional BASIC_TYPE
+            param_type = None
+            if self.current_token()[0] == 'BASIC_TYPE':
+                param_type = self.eat('BASIC_TYPE')[1]  # Consume the type if present
+
+            # Next, we expect an identifier for the parameter name
+            param_name = self.eat('IDENTIFIER')[1]
+
+            parameters.append({
+                'type': param_type,  # This will be None if no type was provided
+                'name': param_name
+            })
+
+            # If the next token is a comma, consume it to proceed to the next parameter
+            if self.current_token()[0] == 'COMMA':
+                self.eat('COMMA')
+            else:
+                break  # Exit loop if no comma (and we assume we're at the end of the parameter list)
+
+        return parameters
 
     def comment(self):
         comment = self.eat('COMMENT')
