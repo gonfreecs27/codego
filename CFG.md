@@ -20,13 +20,13 @@ For identifiers:
 
 <identifier>    →   <letter> { <letter> | <digit> }
 
-<letter>	      →   [a-zA-Z_]
+<letter>	→   [a-zA-Z_]
 
-<digit> 	      →   [0-9]
+<digit> 	→   [0-9]
 
 ```
 
-For literals, which cover numeric, string and Boolean literals:
+For literals, which cover numeric, string and boolean literals:
 
 ```
 
@@ -37,6 +37,12 @@ For literals, which cover numeric, string and Boolean literals:
 <string_literal>  →   '"' { <characters> } '"'
 
 <boolean_literal> →   "Tama" | "Mali"
+
+```
+
+For special characters and symbols:
+
+```
 
 <characters>      →   <letter> | <digit> | <whitespace> | <punctuation> | <special_character>
 
@@ -73,7 +79,7 @@ Rules:
 
 ```
 
-<var_declaration>	→ [<basic_type>] <identifier> [ "=" <expression> ]
+<var_declaration> → [<basic_type>] <identifier> [ "=" <expression> ]
 
 ```
 
@@ -195,7 +201,8 @@ Examples:
 ```
 
 Gawa bayaran (Desimal bayad, Desimal presyo) {
-	return bayad - presyo
+	sukli = bayad - presyo
+	print(sukli)
 }
 
 ```
