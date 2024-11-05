@@ -48,7 +48,8 @@ def main():
         print(f"Error: The file '{filename}' was not found.")
     except Exception as e:
         print(f"Invalid Syntax: {e}")
-        traceback.print_exc()  # For debugging purposes
+        # Enable below line for debugging purposes
+        # traceback.print_exc()
 
 def print_ast(ast, level=0):
     """ Pretty print the Abstract Syntax Tree (AST) """

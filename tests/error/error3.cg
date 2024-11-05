@@ -1,0 +1,6 @@
+# This error produces invalid format for Habang clause
+# because the compiler will expect left parenthesis after Habang
+
+Habang mayOrderPa - 1 {
+    print("Huwag ilimbag ang resibo")
+}

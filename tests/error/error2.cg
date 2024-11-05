@@ -1,0 +1,5 @@
+# It will produce an error because of invalid Gawa declaration
+
+Kung (bayad > total) {
+  Gawa mo
+}

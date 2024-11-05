@@ -8,7 +8,7 @@ The CodeGo Compiler is a tool for compiling and executing CodeGo source files wi
 - Prepare your CodeGo source code files with the `.cg` extension.
 
 ## File Structure
-Your project should have the following structure:
+The project has the following structure:
 
 ```
 
@@ -24,7 +24,7 @@ Your project should have the following structure:
 │   └── valid/                          
 │       └── 00-var_declaration.cg       # Example CodeGo valid source files
 ├── codego.py                           # The main compiler script
-├── COMPILE.md
+├── INSTRUCTIONS.md
 └── README.md
 
 ```
@@ -94,5 +94,6 @@ python codego.py tests/valid/00-var-declaration.cg
 
 ## Additional Information
 
-***File Extension:*** Ensure that the source file has a .cg extension. The compiler checks for this and will raise an error if the extension is incorrect.
-***Error Messages:*** Pay attention to error messages for debugging. They will provide line numbers and descriptions of the issues encountered.
+**File Extension:** Ensure that the source file has a .cg extension. The compiler checks for this and will raise an error if the extension is incorrect.
+
+**Error Messages:** Pay attention to error messages for debugging. They will provide line numbers and descriptions of the issues encountered.
