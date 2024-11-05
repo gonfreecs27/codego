@@ -1,3 +1,13 @@
+# Table of Contents
+
+- [CodeGo Compiler Usage Instructions](#codego-compiler-usage-instructions)
+  - [Overview](#overview)
+  - [Prerequisites](#prerequisites)
+  - [File Structure](#file-structure)
+  - [Instructions](#instructions)
+  - [Example Command](#example-command)
+  - [Additional Information](#additional-information)
+
 # CodeGo Compiler Usage Instructions
 
 ## Overview
