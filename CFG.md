@@ -1,3 +1,16 @@
+# Table of Contents
+
+- [Context Free Grammar](#context-free-grammar)
+  - [Basic Components](#basic-components)
+  - [Variable Declarations](#variable-declarations)
+  - [Conditional Statements](#conditional-statements)
+  - [Loop Statements](#loop-statements)
+  - [Function Statements](#function-statements)
+  - [Class Statements](#class-statements)
+  - [Error Handling](#error-handling)
+  - [Comments](#comments)
+
+
 # Context Free Grammar
 
 This section defines the syntax of CodeGo language. To easily define and understood the syntax, we used a mix of Backus-Naur Form (BNF) and Extended Backus-Naur Form (EBNF) rules, BNF for simple expressions and EBNF for more complex expressions.
