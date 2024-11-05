@@ -1,0 +1,3 @@
+Habang (mayOrderPa - 1) {
+    print("Huwag ilimbag ang resibo")
+}

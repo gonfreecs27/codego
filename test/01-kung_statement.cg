@@ -1,0 +1,9 @@
+Kung (bayad > total) {
+  Desimal sukli = bayad - total
+  print("May sukli na ", sukli)
+
+  Tsek ako = Tama
+
+  sukli = sukli - 10
+  hello = 5
+}
